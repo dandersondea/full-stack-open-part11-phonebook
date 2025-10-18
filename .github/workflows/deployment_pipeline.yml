@@ -43,11 +43,11 @@ jobs:
         run: npm run build:backend # This builds the frontend and copies it to the backend
 
       - name: setup flyctl
-        if: ${{ needs.check_commit_messages_for_skip.outputs.status != 'true' }}
+        if: ${{ github.event_name == 'push' && needs.check_commit_messages_for_skip.outputs.status != 'true' }}
         uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: deploy
-        if: ${{ needs.check_commit_messages_for_skip.outputs.status != 'true' }}
+        if: ${{ github.event_name == 'push' && needs.check_commit_messages_for_skip.outputs.status != 'true' }}
         run: |
           cd phonebook-backend
           flyctl deploy --remote-only --ha=false
