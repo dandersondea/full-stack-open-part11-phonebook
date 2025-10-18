@@ -9,7 +9,7 @@
     "dev:backend": "npm run dev --prefix phonebook-backend",
     "dev:full": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "build:frontend": "npm run build --prefix phonebook-frontend",
-    "build:backend": "npm run build --prefix phonebook-backend",
+    "build:backend": "npm run build:ui --prefix phonebook-backend",
     "deploy:backend": "npm run deploy --prefix phonebook-backend",
     "deploy:full": "npm run deploy:full --prefix phonebook-backend",
     "logs:prod": "npm run logs:prod --prefix phonebook-backend",
