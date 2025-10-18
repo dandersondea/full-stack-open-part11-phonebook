@@ -1,0 +1,70 @@
+name: Deployment pipeline
+
+on:
+  push:
+    branches: [main]
+
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize]
+
+jobs:
+  check_commit_messages_for_skip:
+    runs-on: ubuntu-latest
+    outputs:
+      status: ${{ steps.check.outcome == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+      - if: ${{ contains(join(fromJson(toJson(github.event.commits)).*.message, ' | '), '#skip') }}
+        id: check
+        run: echo
+
+  deployment_pipeline:
+    needs: [check_commit_messages_for_skip]
+    runs-on: ubuntu-latest
+    concurrency: deploy-group
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: install frontend dependencies
+        run: npm ci --prefix phonebook-frontend
+
+      - name: install backend dependencies
+        run: npm ci --prefix phonebook-backend
+
+      - name: lint
+        run: npm run lint
+
+      - name: build
+        run: npm run build:backend # This builds the frontend and copies it to the backend
+
+      - name: setup flyctl
+        if: ${{ github.event_name == 'push' && needs.check_commit_messages_for_skip.outputs.status != 'true' }}
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: deploy
+        if: ${{ github.event_name == 'push' && needs.check_commit_messages_for_skip.outputs.status != 'true' }}
+        run: |
+          cd phonebook-backend
+          flyctl deploy --remote-only --ha=false
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+  tag_release:
+    needs: [check_commit_messages_for_skip, deployment_pipeline]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bump version and push tag
+        if: ${{ github.event_name == 'push' && needs.check_commit_messages_for_skip.outputs.status != 'true' }}
+        uses: anothrNick/github-tag-action@1.75.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: 'patch'
+          INITIAL_VERSION: 0.0.0
+          # DRY_RUN: true

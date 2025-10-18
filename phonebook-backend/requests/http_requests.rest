@@ -1,0 +1,89 @@
+GET http://localhost:3001/api/persons
+
+###
+
+GET http://localhost:3001/info
+
+###
+
+GET http://localhost:3001/api/persons/someInvalidId
+
+###
+
+GET http://localhost:3001/api/persons/68250e4a2ab2f4ecffb0b6a7
+
+###
+
+GET http://localhost:3001/unknownEndpoint
+
+### 
+
+DELETE http://localhost:3001/api/persons/682428509346765f3f4813c3
+
+### 
+
+DELETE http://localhost:3001/api/persons/someInvalidId
+
+###
+
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Test9",
+    "number": "09-1234556"
+}
+
+###
+
+PUT http://localhost:3001/api/persons/682653e034706f2559b0a99c
+Content-Type: application/json
+
+{
+    "name": "Test9",
+    "number": "SBDCDLKJFA:LSKDJAS:LK"
+}
+
+###
+
+GET https://phonebook-backend-fso-danderson.fly.dev/api/persons
+
+###
+
+GET https://phonebook-backend-fso-danderson.fly.dev/info
+
+###
+
+GET https://phonebook-backend-fso-danderson.fly.dev/api/persons/1
+
+###
+
+GET https://phonebook-backend-fso-danderson.fly.dev/api/persons/682511d74a071e62226abdba
+
+### 
+
+DELETE https://phonebook-backend-fso-danderson.fly.dev/api/persons/someInvalidID
+
+###
+
+POST https://phonebook-backend-fso-danderson.fly.dev/api/persons
+Content-Type: application/json
+
+{
+    "name": "Test1",
+    "number": "911"
+}
+
+### 
+
+PUT https://phonebook-backend-fso-danderson.fly.dev/api/persons/6826447294f311a92932ecb9
+Content-Type: application/json
+
+{
+    "name": "Te",
+    "number": "911"
+}
+
+### 
+
+DELETE https://phonebook-backend-fso-danderson.fly.dev/api/persons/593773

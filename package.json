@@ -1,0 +1,24 @@
+{
+  "name": "phonebook",
+  "version": "1.0.0",
+  "description": "Full Stack Open: Part 11 - CI/CD",
+  "main": "phonebook-backend/index.js",
+  "scripts": {
+    "lint": "npm run lint --prefix phonebook-frontend && npm run lint --prefix phonebook-backend",
+    "dev:frontend": "npm run dev --prefix phonebook-frontend",
+    "dev:backend": "npm run dev --prefix phonebook-backend",
+    "dev:full": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build:frontend": "npm run build --prefix phonebook-frontend",
+    "build:backend": "npm run build:ui --prefix phonebook-backend",
+    "deploy:backend": "npm run deploy --prefix phonebook-backend",
+    "deploy:full": "npm run deploy:full --prefix phonebook-backend",
+    "logs:prod": "npm run logs:prod --prefix phonebook-backend",
+    "fly:stop": "npm run fly:stop --prefix phonebook-backend",
+    "fly:start": "npm run fly:start --prefix phonebook-backend"
+  },
+  "author": "Dan Anderson",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
